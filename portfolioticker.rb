@@ -11,20 +11,33 @@
 require 'open-uri'
 require 'json'
 
-portfolio = {
-    'ETH' => 18.75,
-    'ZRX' => 10.986.57375,
-    'XLM' => 16.714.989605,
-    'BTC' => 0.59526,
-    'KNC' => 1.056.00,
-    'NEO' => 23,
-    'XMR' => 1,    
-}.freeze
+class Portfolio
+    # Edit the coins and number of coins you have of each:
+    PORTFOLIO = {
+        'ETH' => 18.75,
+        'ZRX' => 10986.57375,
+        'XLM' => 16.714989605,
+        'BTC' => 0.59526,
+        'KNC' => 1056,
+        'NEO' => 23,
+        'XMR' => 1,    
+    }.freeze
 
-# Edit the coins and number of coins you have of each:
+    CURRENCY = 'USD'
 
+    DEFAULT_PERIOD = '24h'   
 
-DEFAULT_PERIOD = '24h'
+    def getCoinPrice(coin)
+		    data = open("https://min-api.cryptocompare.com/data/price?fsym=#{coin}&tsyms=#{CURRENCY}").read
+			coinPrice = JSON.parse(data)			
+			coinPrice.values.first.to_f
+    end
 
-URL = 'https://api.coinmarketcap.com/v1/ticker/'
+    def getPortfolioValue()
+        coinValues = PORTFOLIO.map{ |coin, amount| getCoinPrice(coin)*amount }
+        coinValues
+    end
+end
 
+test = Portfolio.new
+test.getPortfolioValue
