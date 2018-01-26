@@ -1,6 +1,5 @@
-#!/usr/bin/env ruby
+#!/usr/bin/ruby
 # encoding: utf-8
-
 # <bitbar.title>Crypto Portfolio Ticker</bitbar.title>
 # <bitbar.version>v1.0</bitbar.version>
 # <bitbar.author>Owen Craston</bitbar.author>
@@ -16,7 +15,7 @@ class Portfolio
     PORTFOLIO = {
         'ETH' => 18.75,
         'ZRX' => 10986.57375,
-        'XLM' => 16.714989605,
+        'XLM' => 16714.989605,
         'BTC' => 0.59526,
         'KNC' => 1056,
         'NEO' => 23,
@@ -35,9 +34,18 @@ class Portfolio
 
     def getPortfolioValue()
         coinValues = PORTFOLIO.map{ |coin, amount| getCoinPrice(coin)*amount }
-        coinValues
+        coinValues.sum
     end
 end
 
-test = Portfolio.new
-test.getPortfolioValue
+# Create portfolio instance
+portfolio = Portfolio.new
+portfolioValue = portfolio.getPortfolioValue
+
+# Begin output for bitbar
+
+# create output variable
+output = "#{portfolioValue}\n"
+# print the output
+puts output
+
