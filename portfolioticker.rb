@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 # encoding: utf-8
 # <bitbar.title>Crypto Portfolio Ticker</bitbar.title>
-# <bitbar.version>v1.0</bitbar.version>
+# <bitbar.version>v1.9</bitbar.version>
 # <bitbar.author>Owen Craston</bitbar.author>
 # <bitbar.author.github>owencraston</bitbar.author.github>
 # <bitbar.desc>A ticker of your current portfolio value.</bitbar.desc>
