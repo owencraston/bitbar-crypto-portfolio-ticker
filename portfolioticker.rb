@@ -24,7 +24,7 @@ class Portfolio
 
     CURRENCY = 'USD'
 
-    DEFAULT_PERIOD = '24h'   
+    DEFAULT_PERIOD = '24h'
 
     def getCoinPrice(coin)
 		    data = open("https://min-api.cryptocompare.com/data/price?fsym=#{coin}&tsyms=#{CURRENCY}").read
@@ -34,7 +34,7 @@ class Portfolio
 
     def getPortfolioValue()
         coinValues = PORTFOLIO.map{ |coin, amount| getCoinPrice(coin)*amount }
-        coinValues.sum
+        coinValues.inject(0, :+).round(3)
     end
 end
 
