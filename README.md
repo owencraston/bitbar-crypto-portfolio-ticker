@@ -16,7 +16,7 @@ This is a simple plugin for BitBar that shows you the total value of your crypto
 #### *Note*
 - I like to `clone` the repo into its own folder within the BitBar plugin folder and then copy the `.rb` file outside this folder. This allows you to keep the plugin up to date simply by running `git pull` inside the local repository folder.
 - The folder will look something like this:
-![Imgur](https://i.imgur.com/WJuCDbf.png)
+![Imgur](https://i.imgur.com/izyoTYK.png)
 
 ## Customization
 
