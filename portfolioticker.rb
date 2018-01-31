@@ -9,7 +9,6 @@
 
 require 'open-uri'
 require 'json'
-require 'Time'
 
 class Portfolio
     # Edit the coins and number of coins you have of each:
