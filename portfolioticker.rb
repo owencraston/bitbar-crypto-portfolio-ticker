@@ -9,6 +9,7 @@
 
 require 'open-uri'
 require 'json'
+require 'Time'
 
 class Portfolio
     # Edit the coins and number of coins you have of each:
@@ -24,28 +25,62 @@ class Portfolio
 
     CURRENCY = 'USD'
 
-    DEFAULT_PERIOD = '24h'
+    # 24 hours in seconds
+    TWENTY_FOUR_HOURS = 86400
 
     def getCoinPrice(coin)
-		    data = open("https://min-api.cryptocompare.com/data/price?fsym=#{coin}&tsyms=#{CURRENCY}").read
-			coinPrice = JSON.parse(data)			
+            data = open("https://min-api.cryptocompare.com/data/price?fsym=#{coin}&tsyms=#{CURRENCY}").read
+            coinPrice = JSON.parse(data)		
 			coinPrice.values.first.to_f
+    end
+
+    def getPrevDayCoinPrice(coin, timeStamp)
+        data = open("https://min-api.cryptocompare.com/data/pricehistorical?fsym=#{coin}&tsyms=#{CURRENCY}&ts=#{timeStamp}").read
+        coinPrice = JSON.parse(data)
+        coinPrice.values.first.values.first.to_f
     end
 
     def getPortfolioValue()
         coinValues = PORTFOLIO.map{ |coin, amount| getCoinPrice(coin)*amount }
         coinValues.inject(0, :+).round(3)
     end
+
+    def getPrevDay()
+        timeStamp = (Time.now - TWENTY_FOUR_HOURS).to_i
+    end
+
+    def getPrevDayPortfolioValue()
+        timeStamp = getPrevDay()
+        coinValues = PORTFOLIO.map{ |coin, amount| getPrevDayCoinPrice(coin, timeStamp)*amount }
+        coinValues.inject(0, :+).round(3)
+    end
+
+    def getPercentChange
+        currentPortfolioValue = getPortfolioValue()
+        prevdayPortfolioValue = getPrevDayPortfolioValue()
+        amountChanged = currentPortfolioValue - prevdayPortfolioValue
+        percentChange = ((amountChanged/prevdayPortfolioValue) * 100).round(3)
+    end
+
+    def createOutputString()
+        currentPortfolioValue = getPortfolioValue()
+        prevdayPortfolioValue = getPrevDayPortfolioValue()
+        if currentPortfolioValue > prevdayPortfolioValue
+            output = "🚀  #{getPortfolioValue()} +#{getPercentChange().abs}%"
+        elsif currentPortfolioValue < prevdayPortfolioValue
+            output = "⛷  #{getPortfolioValue()} -#{getPercentChange().abs}%"
+        else 
+            output = "#{getPortfolioValue()} #{getPercentChange().abs}%"
+        end
+    end
 end
 
 # Create portfolio instance
 portfolio = Portfolio.new
-portfolioValue = portfolio.getPortfolioValue
 
 # Begin output for bitbar
-
 # create output variable
-output = "#{portfolioValue}\n"
+output = "#{portfolio.createOutputString()}\n"
 # print the output
 puts output
 
